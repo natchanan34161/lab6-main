@@ -1,0 +1,98 @@
+<h1 class="h1">Student List</h1>
+@if (!isCardView) {
+<button type="button" class="btn btn-primary" (click)="viewCard()"><i class="fa fa-address-card-o"
+        aria-hidden="true"></i> Card</button>
+<!-- student Table start -->
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">NAME</th>
+            <th scope="col">Department</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- LOOP for student -->
+        @for (student of students; track $index) {
+        <tr>
+            <td>{{student['studentID']}}</td>
+            <td>{{student['studentName']}}</td>
+            <td>{{student['department']}}</td>
+            <td>
+                <button type="button" class="btn btn-primary" style="margin-right: 5px;" (click)="selectStudent(student)">Select</button>
+                <button type="button" class="btn btn-danger" (click)="delete(student)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+            </td>
+        </tr>
+        }
+        <!-- LOOP end -->
+    </tbody>
+</table>
+<!-- student Table end -->
+} @else if (isCardView) {
+<button type="button" class="btn btn-primary" (click)="viewTable()"><i class="fa fa-table" aria-hidden="true"></i>
+    Table</button>
+<!-- student Card start -->
+<div class="row">
+    @for (student of students; track $index) {
+    <div class="col-md-3 col-sm-12">
+        <div class="card" style="width: 18rem; margin-top: 5px;">
+            <img src="{{student.studentPicture}}" class="card-img-top" alt="img">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: {{student.studentID}}</li>
+                <li class="list-group-item">NAME: {{student.studentName}}</li>
+                <li class="list-group-item">Department: {{student.department}}</li>
+            </ul>
+            <div class="card-body">
+                <button type="button" class="btn btn-primary" style="margin-right: 5px;" (click)="selectStudent(student)">Select</button>
+                <button type="button" class="btn btn-danger" (click)="delete(student)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+
+<!-- student Card end -->
+}
+<!-- student From start -->
+<h1 class="h1">Student FROM</h1>
+<form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+<div class="card" style="width: 50rem; margin-top: 5px; margin-left: 5px;">
+    <div class="mb-3 d-flex align-items-center" style="margin-top: 5px; margin-left: 5px;">
+        <label for="studentID" class="me-2 mb-0">ID:</label>
+        <input type="text" class="form-control" id="studentID" formControlName="studentIdFormControl" placeholder="Enter Student ID" style="max-width:750px" [class.is-invalid]="isInvalid('studentIdFormControl')" value="{{student.studentID}}">
+        <div class="invalid-feedback">
+            กรุณาใส่ข้อมูลเป็นตัวเลขเท่านั้น
+        </div>
+    </div>
+    <div class="mb-3 d-flex align-items-center" style="margin-left: 5px;">
+        <label for="studentName" class="me-2 mb-0">NAME:</label>
+        <input type="text" class="form-control" id="studentName" formControlName="studentNameFormControl" placeholder="Enter Student NAME" style="max-width:720px" [class.is-invalid]="isInvalid('studentNameFormControl')" value="{{student.studentName}}">
+        <div class="invalid-feedback">
+            @if (studentForm.get('studentNameFormControl')?.errors?.['required']) {
+                กรุณาใส่ข้อมูล
+            }
+            @if (studentForm.get('studentNameFormControl')?.errors?.['minlength']) {
+                กรุณาใส่ข้อมูล 5 ตัวขึ้นไป
+            }
+        </div>
+    </div>
+    <div class="mb-3 d-flex align-items-center" style="margin-left: 5px;">
+        <label for="department" class="me-2 mb-0">Department:</label>
+        <input type="text" class="form-control" id="department" formControlName="departmentFormControl" placeholder="Enter Department" style="max-width:680px" [class.is-invalid]="isInvalid('departmentFormControl')" value="{{student.department}}">
+        <div class="invalid-feedback">
+            กรุณาใส่ข้อมูล
+        </div>
+    </div>
+    <div class="mb-3 d-flex align-items-center" style="margin-left: 5px;">
+        <label for="studentPicture" class="me-2 mb-0">Picture:</label>
+        <input type="text" class="form-control" id="studentPicture" formControlName="studentPictureFormControl" placeholder="Enter Student Picture:URL" style="max-width:715px" [class.is-invalid]="isInvalid('studentPictureFormControl')" value="{{student.studentPicture}}">
+        <div class="invalid-feedback">
+            กรุณาใส่ข้อมูล
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="studentForm.invalid" style="width: 100px; margin: 5px;"><i class="fa fa-floppy-o" aria-hidden="true" style="padding-right: 5px;"></i>Save</button>
+</div>
+</form>
+
+<!-- student From end -->
